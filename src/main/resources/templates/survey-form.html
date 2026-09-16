@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>来店アンケート | 入力フォーム</title>
+</head>
+
+<body>
+	<article>
+		<header>
+			<h1>来店アンケート</h1>
+			<p th:text="${store.name}">店舗名</p>
+		</header>
+		<hr>
+		<form th:action="@{/confirm}" th:object="${form}" method="post">
+
+			<input type="hidden" th:field="*{storeId}">
+
+			<div>
+				<div>
+					<label>
+						<h1>名前</h1>
+					</label>
+					<span>20字以内</span>
+				</div>
+				<input type="text" th:field="*{name}" placeholder="お名前を入力">
+			</div>
+
+			<div>
+				<h1>年齢層</h1>
+				<th:block th:each="age_group: ${age_groups}">
+					<input type="radio" th:field="*{ageGroupId}" th:value="${age_group.id}">
+					<label th:text="${age_group.label}">10代</label>
+				</th:block>
+			</div>
+
+			<div>
+				<label>
+					<h1>メールアドレス</h1>
+				</label>
+				<input type="email" th:field="*{email}" placeholder="example@example.com">
+				<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red;"></p>
+			</div>
+
+			<div>
+				<h1>来店目的</h1>
+				<th:block th:each="visit_purpose_option: ${visit_purpose_options}">
+					<input type="checkbox" th:field="*{visitPurposeIds}" name="visit_purpose_id"
+						th:value="${visit_purpose_option.id}">
+					<label th:text="${visit_purpose_option.label}">ランチ</label>
+				</th:block>
+			</div>
+
+			<div>
+				<label>
+					<h1>来店頻度</h1>
+				</label>
+				<select th:field="*{visitFrequencyId}">
+					<th:block th:each="visit_frequency_option: ${visit_frequency_options}">
+						<option value="">選択してください</option>
+						<option th:each="visit_frequency_option : ${visit_frequency_options}"
+							th:value="${visit_frequency_option.id}" th:text="${visit_frequency_option.label}">初めて
+						</option>
+					</th:block>
+				</select>
+			</div>
+
+			<div>
+				<h1>料理の満足度</h1>
+				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+					<input type="radio" th:field="*{mealRating}" th:value="${i}">
+					<label th:text="${i}">1</label>
+				</th:block>
+			</div>
+
+			<div>
+				<h1>接客の満足度</h1>
+				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+					<input type="radio" th:field="*{serviceRating}" th:value="${i}">
+					<label th:text="${i}">1</label>
+				</th:block>
+			</div>
+
+			<div>
+				<h1>店内の清潔感</h1>
+				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+					<input type="radio" th:field="*{cleanlinessRating}" th:value="${i}">
+					<label th:text="${i}">1</label>
+				</th:block>
+			</div>
+
+			<div>
+				<label>
+					<h1>おすすめメニュー</h1>
+					<span>100字以内</span>
+				</label>
+				<input type="text" th:field="*{recommendMenu}" placeholder="例: イカスミカルパッチョ">
+			</div>
+
+			<th:block th:if="${store != null and store.id == 4}">
+				<div>
+					<h1>【長崎限定】食べたか</h1>
+					<input type="radio" th:field="*{hasEatenNagasakiHamburg}" value="true">
+					<label>食べた</label>
+					<input type="radio" th:field="*{hasEatenNagasakiHamburg}" value="false">
+					<label>食べてない</label>
+				</div>
+
+				<div>
+					<h1>ハンバーグの満足度</h1>
+					<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+						<input type="radio" th:field="*{nagasakiHamburgRating}" th:value="${i}">
+						<label th:text="${i}">1</label>
+					</th:block>
+				</div>
+			</th:block>
+
+			<div>
+				<label>
+					<h1>ご意見・ご感想</h1>
+				</label>
+				<textarea th:field="*{feedback}" placeholder="ご自由にお書きください。"></textarea>
+			</div>
+
+			<input type="submit" text="送信">
+		</form>
+	</article>
+</body>
+
+</html>

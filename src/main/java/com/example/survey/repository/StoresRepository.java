@@ -1,0 +1,9 @@
+package com.example.survey.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.survey.entity.StoresEntity;
+
+public interface StoresRepository extends JpaRepository<StoresEntity, Long>{
+	
+}
