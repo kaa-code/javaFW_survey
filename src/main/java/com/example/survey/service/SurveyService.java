@@ -20,9 +20,9 @@ public class SurveyService {
 		
 		SurveyDto dto = new SurveyDto();
 		
-		// 
 		modelMapper.map(form, dto);
 		
 		return dto;
 	}
+	
 }

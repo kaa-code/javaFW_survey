@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.survey.dto.SurveyDto;
 import com.example.survey.entity.AgeGroupsEntity;
 import com.example.survey.entity.VisitFrequencyOptionsEntity;
 import com.example.survey.entity.VisitPurposeOptionsEntity;
 import com.example.survey.form.SurveyForm;
 import com.example.survey.service.AgeGroupsService;
 import com.example.survey.service.StoresService;
+import com.example.survey.service.SurveyService;
 import com.example.survey.service.VisitFrequencyOptionsService;
 import com.example.survey.service.VisitPurposeOptionsService;
 
@@ -34,6 +36,7 @@ public class SurveyController {
 	private final VisitFrequencyOptionsService visitFrequencyOptionsService;
 	private final VisitPurposeOptionsService visitPurposeOptionsService;
 	private final StoresService storesService;
+	private final SurveyService surveyService;
 
 	// =メソッド=
 
@@ -58,6 +61,8 @@ public class SurveyController {
 		model.addAttribute("visit_frequency_options", visitFrequencyOptions);
 		// 来店目的ラベル
 		model.addAttribute("visit_purpose_options", visitPurposeOptions);
+		// 評価のための数値ラベル
+		model.addAttribute("scores", List.of(1, 2, 3, 4, 5));
 	}
 
 	// =マッピング=
@@ -93,7 +98,11 @@ public class SurveyController {
 	@PostMapping("/confirm")
 	public String surveyConfirm(@ModelAttribute("form") SurveyForm form, BindingResult result, Model model) {
 
-		log.info(form.getName());
+		SurveyDto dto;
+		
+		dto = surveyService.setSurveyDto(form);
+		
+		model.addAttribute("dto", dto);
 		
 		return "test";
 	}

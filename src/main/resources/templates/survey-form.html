@@ -13,7 +13,7 @@
 			<p th:text="${store.name}">店舗名</p>
 		</header>
 		<hr>
-		<form th:action="@{/confirm}" th:object="${form}" method="post">
+		<form th:action="@{/survey/confirm}" th:object="${form}" method="post">
 
 			<input type="hidden" th:field="*{storeId}">
 
@@ -68,7 +68,7 @@
 
 			<div>
 				<h1>料理の満足度</h1>
-				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+				<th:block th:each="i: ${scores}">
 					<input type="radio" th:field="*{mealRating}" th:value="${i}">
 					<label th:text="${i}">1</label>
 				</th:block>
@@ -76,7 +76,7 @@
 
 			<div>
 				<h1>接客の満足度</h1>
-				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+				<th:block th:each="i: ${scores}">
 					<input type="radio" th:field="*{serviceRating}" th:value="${i}">
 					<label th:text="${i}">1</label>
 				</th:block>
@@ -84,7 +84,7 @@
 
 			<div>
 				<h1>店内の清潔感</h1>
-				<th:block th:each="i: ${#numbers.sequence(1, 5)}">
+				<th:block th:each="i: ${scores}">
 					<input type="radio" th:field="*{cleanlinessRating}" th:value="${i}">
 					<label th:text="${i}">1</label>
 				</th:block>
