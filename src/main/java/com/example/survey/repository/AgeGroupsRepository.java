@@ -10,4 +10,5 @@ public interface AgeGroupsRepository extends JpaRepository<AgeGroupsEntity, Inte
 	
 	// sort_orderの昇順で全件取得
     List<AgeGroupsEntity> findAllByOrderBySortOrderAsc();
+    
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.survey.dto.SurveyDto;
 import com.example.survey.entity.AgeGroupsEntity;
+import com.example.survey.entity.StoresEntity;
 import com.example.survey.entity.VisitFrequencyOptionsEntity;
 import com.example.survey.entity.VisitPurposeOptionsEntity;
 import com.example.survey.form.SurveyForm;
@@ -22,6 +23,7 @@ import com.example.survey.service.SurveyService;
 import com.example.survey.service.VisitFrequencyOptionsService;
 import com.example.survey.service.VisitPurposeOptionsService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,35 +77,65 @@ public class SurveyController {
 
 	// アンケート入力
 	@GetMapping
-	public String inputSurvey(@RequestParam("id") Long storeId, Model model) {
+	public String inputSurvey(@RequestParam(name = "id", required = false) Long storeId, Model model) {
+
+		StoresEntity store = storesService.findStoreById(storeId);
+
+		if (store == null) {
+			return "error/404";
+		}
 
 		SurveyForm form = new SurveyForm();
 		form.setStoreId(storeId);
-		
-		
+
 		// =属性追加=
-		
+
 		// マスターテーブルの一括属性追加
 		addAttributeMasterTable(model);
 		// 店舗の属性追加
-		model.addAttribute("store", storesService.findStoreById(storeId));
+		model.addAttribute("store", store);
 		// フォームの属性追加		
 		model.addAttribute("form", form);
+
+		return "survey/form";
+	}
+	
+	@PostMapping("/back")
+	public String backToInput(@ModelAttribute SurveyForm form, Model model) {
 		
+		StoresEntity store = storesService.findStoreById(form.getStoreId());
 		
-		return "survey-form";
+	    model.addAttribute("form", form);
+	    model.addAttribute("store", store);
+	    
+	    addAttributeMasterTable(model);
+	    
+	    
+	    return "survey/form";
 	}
 
 	// アンケート送信処理
 	@PostMapping("/confirm")
-	public String surveyConfirm(@ModelAttribute("form") SurveyForm form, BindingResult result, Model model) {
+	public String surveyConfirm(@Valid @ModelAttribute("form") SurveyForm form, BindingResult result, Model model) {
+
+		if (result.hasErrors()) {
+
+		}
 
 		SurveyDto dto;
-		
+		StoresEntity store;
+
 		dto = surveyService.setSurveyDto(form);
-		
+		store = storesService.findStoreById(form.getStoreId());
+
 		model.addAttribute("dto", dto);
-		
-		return "test";
+		model.addAttribute("store", store);
+
+		return "survey/confirm";
 	}
-}
+	
+	@PostMapping("/complete")
+	public String surveyComplete() {
+		return "survey/complete";
+	}
+	}

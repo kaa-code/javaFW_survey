@@ -57,12 +57,10 @@
 					<h1>来店頻度</h1>
 				</label>
 				<select th:field="*{visitFrequencyId}">
-					<th:block th:each="visit_frequency_option: ${visit_frequency_options}">
 						<option value="">選択してください</option>
 						<option th:each="visit_frequency_option : ${visit_frequency_options}"
 							th:value="${visit_frequency_option.id}" th:text="${visit_frequency_option.label}">初めて
 						</option>
-					</th:block>
 				</select>
 			</div>
 
@@ -121,6 +119,13 @@
 					<h1>ご意見・ご感想</h1>
 				</label>
 				<textarea th:field="*{feedback}" placeholder="ご自由にお書きください。"></textarea>
+			</div>
+			
+			<div>
+				<label>
+					利用規約
+				</label>
+				<input type="checkbox" th:field="*{isTermsAccepted}">
 			</div>
 
 			<input type="submit" text="送信">

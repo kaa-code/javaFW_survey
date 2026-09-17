@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>来店アンケート | 確認画面</title>
+</head>
+
+<body>
+	<article>
+		<header>
+			<h1>入力内容の確認</h1>
+			<p th:text="${store != null ? store.name : '店舗情報無し'}">店舗名</p>
+		</header>
+		<hr>
+
+		<section th:object="${dto}">
+			<div>
+				<h2>お名前</h2>
+				<p th:text="*{name}">山田 太郎</p>
+			</div>
+
+			<div>
+				<h2>年齢層</h2>
+				<p th:text="*{ageGroupLabel}">20代</p>
+			</div>
+
+			<div>
+				<h2>メールアドレス</h2>
+				<p th:text="*{email}">example@example.com</p>
+			</div>
+
+			<div>
+				<h2>来店目的</h2>
+				<ul>
+					<li th:each="visitPurposeLabel : *{visitPurposeLabels}" th:text="${visitPurposeLabel}">ランチ</li>
+				</ul>
+			</div>
+
+			<div>
+				<h2>来店頻度</h2>
+				<p th:text="*{visitFrequencyLabel}">初めて</p>
+			</div>
+
+			<div>
+				<h2>料理の満足度</h2>
+				<p th:text="*{mealRating}">5</p>
+			</div>
+
+			<div>
+				<h2>接客の満足度</h2>
+				<p th:text="*{serviceRating}">5</p>
+			</div>
+
+			<div>
+				<h2>店内の清潔感</h2>
+				<p th:text="*{cleanlinessRating}">5</p>
+			</div>
+
+			<div>
+				<h2>おすすめメニュー</h2>
+				<p th:text="*{#strings.isEmpty(recommendMenu) ? '（未回答）' : recommendMenu}">おすすめメニュー</p>
+			</div>
+
+			<div>
+				<h2>ご意見・ご感想</h2>
+				<p th:text="*{#strings.isEmpty(feedback) ? '（未回答）' : feedback}">ご意見・ご感想</p>
+			</div>
+
+			<!-- 長崎支店限定項目 (hasEatenNagasakiHamburg が null でない場合のみ表示) -->
+			<th:block th:if="*{hasEatenNagasakiHamburg != null}">
+				<div>
+					<h2>【長崎限定】「バカうまハンバーグ」の注文</h2>
+					<p th:text="*{hasEatenNagasakiHamburg ? '食べた' : '食べてない'}">食べた</p>
+				</div>
+
+				<div th:if="*{hasEatenNagasakiHamburg}">
+					<h2>【長崎限定】ハンバーグの満足度</h2>
+					<p th:text="*{nagasakiHamburgRating}">5</p>
+				</div>
+			</th:block>
+			
+			<div>
+				<h2>利用規約</h2>
+				<p>同意済み</p>
+			</div>
+		</section>
+
+		<hr>
+
+		<form method="post" th:object="${form}">
+
+			<input type="hidden" th:field="*{storeId}">
+			<input type="hidden" th:field="*{name}">
+			<input type="hidden" th:field="*{ageGroupId}">
+			<input type="hidden" th:field="*{email}">
+			<input type="hidden" th:field="*{visitFrequencyId}">
+
+			<th:block th:each="id : *{visitPurposeIds}">
+				<input type="hidden" name="visitPurposeIds" th:value="${id}">
+			</th:block>
+
+			<input type="hidden" th:field="*{mealRating}">
+			<input type="hidden" th:field="*{serviceRating}">
+			<input type="hidden" th:field="*{cleanlinessRating}">
+			<input type="hidden" th:field="*{recommendMenu}">
+			<input type="hidden" th:field="*{feedback}">
+			<input type="hidden" th:field="*{isTermsAccepted}">
+
+			<input type="hidden" th:field="*{hasEatenNagasakiHamburg}">
+			<input type="hidden" th:field="*{nagasakiHamburgRating}">
+
+			<div>
+				<button type="submit" th:formaction="@{/survey/back}">修正する（入力画面に戻る）</button>
+				<button type="submit" th:formaction="@{/survey/complete}">送信する</button>
+			</div>
+		</form>
+	</article>
+</body>
+
+</html>

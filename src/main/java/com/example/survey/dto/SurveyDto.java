@@ -16,7 +16,7 @@ public class SurveyDto {
 	private LocalDateTime createdAt;
 
 	// 店舗マスター
-	private StoresEntity stores;
+	private StoresEntity store;
 
 	// ==入力データ==
 

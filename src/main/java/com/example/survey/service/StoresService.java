@@ -17,7 +17,8 @@ public class StoresService {
 	// IDから取得
 	public StoresEntity findStoreById(Long id) {
 		StoresEntity entity;
-		entity = storesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID" + id + "の店舗が取得できませんでした。"));
+		entity = storesRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("ID" + id + "のデータが取得できませんでした。"));
 		return entity;
 	}
 }
